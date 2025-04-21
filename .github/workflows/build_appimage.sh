@@ -65,6 +65,7 @@ prepare_baseenv() {
   retry apt update
   retry apt install -y \
     build-essential \
+    lld \
     curl \
     desktop-file-utils \
     g++-11 \
@@ -180,12 +181,13 @@ prepare_qt() {
   if [ ! -f "/usr/src/qtbase-${QT_VER}/.unpack_ok" ]; then
     qtbase_url="https://download.qt.io/official_releases/qt/${QT_MAJOR_VER}/${QT_VER}/submodules/qtbase-everywhere-src-${QT_VER}.tar.xz"
     retry curl -kSL --compressed "${qtbase_url}" \| tar Jxf - -C "/usr/src/qtbase-${QT_VER}" --strip-components 1
-    touch "/usr/src/qtbase-${qt_ver}/.unpack_ok"
+    touch "/usr/src/qtbase-${QT_VER}/.unpack_ok"
   fi
   cd "/usr/src/qtbase-${QT_VER}"
   rm -fr CMakeCache.txt CMakeFiles
   ./configure \
     -ltcg \
+    -linker lld \
     -release \
     -optimize-size \
     -openssl-runtime \
@@ -206,7 +208,7 @@ prepare_qt() {
   export LD_LIBRARY_PATH="${QT_BASE_DIR}/lib:${LD_LIBRARY_PATH}"
   export PATH="${QT_BASE_DIR}/bin:${PATH}"
   if [ ! -f "/usr/src/qtsvg-${QT_VER}/.unpack_ok" ]; then
-    qtsvg_url="https://download.qt.io/official_releases/qt/${QT_MAJOR_VER}/${QT_VER}/submodules/qtsvg-everywhere-src-$QT_VER}.tar.xz"
+    qtsvg_url="https://download.qt.io/official_releases/qt/${QT_MAJOR_VER}/${QT_VER}/submodules/qtsvg-everywhere-src-{$QT_VER}.tar.xz"
     retry curl -kSL --compressed "${qtsvg_url}" \| tar Jxf - -C "/usr/src/qtsvg-${QT_VER}" --strip-components 1
     touch "/usr/src/qtsvg-${QT_VER}/.unpack_ok"
   fi
