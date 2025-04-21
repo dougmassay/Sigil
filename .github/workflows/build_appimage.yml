@@ -22,4 +22,4 @@ jobs:
         with:
           name: my-artifact
           path: /build/python3.13.2.zip
-          retention-days: 2
+          retention-days: 1
