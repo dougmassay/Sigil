@@ -1,0 +1,21 @@
+name: AppImage Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-package-build:
+    runs-on: ubuntu-latest
+    uses: actions/checkout@v4
+      with:
+        ref: master
+
+    container:
+      image: ubuntu:20.04
+      volumes:
+        - ${{ github.workspace }}:/build
+      options: --privileged
+
+    steps:
+    - name: Run build script
+      run: /build/.github/workflows/build_appimage.sh
