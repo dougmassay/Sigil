@@ -17,4 +17,4 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: master
-      - run: /build/.github/workflows/build_appimage.sh
+      - run: bash /build/.github/workflows/build_appimage.sh
