@@ -18,3 +18,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: bash /build/.github/workflows/build_appimage.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: my-artifact
+          path: /build/python3.13.2.zip
+          retention-days: 2
