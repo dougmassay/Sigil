@@ -14,8 +14,7 @@ jobs:
       options: --privileged
 
     steps:
-      - name: Run build script
       - uses: actions/checkout@v4
         with:
           ref: master
-      run: /build/.github/workflows/build_appimage.sh
+      - run: /build/.github/workflows/build_appimage.sh
