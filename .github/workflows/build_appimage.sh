@@ -171,9 +171,10 @@ prepare_python() {
     touch "/usr/src/python3-${PYTHON_VER}/.unpack_ok"
   fi
   cd "/usr/src/python3-${PYTHON_VER}"
-  ./configure --enable-shared --enable-optimizations --enable-loadable-sqlite-extensions
+  ./Configure --prefix=/opt --enable-shared --enable-optimizations --enable-loadable-sqlite-extensions
   make -j$(nproc)
   make install
+  zip -r "/build/python${PYTHON_VER}.zip" /opt/*
   ldconfig
 }
 
