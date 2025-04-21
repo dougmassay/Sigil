@@ -16,6 +16,5 @@ jobs:
       options: --privileged
 
     steps:
-      - name: Checkout
       - uses: actions/checkout@v4
       - run: bash /build/.github/workflows/build_appimage.sh
