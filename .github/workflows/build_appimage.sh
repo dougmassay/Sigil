@@ -435,7 +435,7 @@ prepare_baseenv
 prepare_buildenv
 # compile openssl 3.x. qBittorrent >= 5.0 required openssl 3.x
 #prepare_ssl
-prepare_qt
+#prepare_qt
 #preapare_libboost
 #prepare_libtorrent
 #build_sigil
