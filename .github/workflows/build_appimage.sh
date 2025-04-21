@@ -11,8 +11,8 @@
 set -o pipefail
 
 # match qt version E.g 6.8.2, 6.8.3
-export QT_MAJOR_VER_="6.8"
-export QT_VER = "6.8.2"
+export QT_MAJOR_VER="6.8"
+export QT_VER="6.8.2"
 export LC_ALL="C.UTF-8"
 export DEBIAN_FRONTEND=noninteractive
 export PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig
