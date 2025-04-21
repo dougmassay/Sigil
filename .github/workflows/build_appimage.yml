@@ -6,9 +6,6 @@ on:
 jobs:
   test-package-build:
     runs-on: ubuntu-latest
-    uses: actions/checkout@v4
-      with:
-        ref: master
 
     container:
       image: ubuntu:20.04
@@ -17,5 +14,8 @@ jobs:
       options: --privileged
 
     steps:
-    - name: Run build script
+      - name: Run build script
+      - uses: actions/checkout@v4
+        with:
+          ref: master
       run: /build/.github/workflows/build_appimage.sh
