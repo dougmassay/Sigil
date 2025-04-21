@@ -10,6 +10,7 @@
 
 set -o pipefail
 
+export PYTHON_VER="3.13.2"
 # match qt version E.g 6.8.2, 6.8.3
 export QT_MAJOR_VER="6.8"
 export QT_VER="6.8.2"
@@ -64,6 +65,7 @@ prepare_baseenv() {
 
   retry apt update
   retry apt install -y \
+    make \
     build-essential \
     lld \
     curl \
@@ -71,11 +73,17 @@ prepare_baseenv() {
     g++-11 \
     git \
     libbrotli-dev \
+    libbz2-dev \
     libfontconfig1-dev \
     libfreetype6-dev \
+    libgdbm-dev \
     libgl1-mesa-dev \
     libgtk-3-dev \
     libicu-dev \
+    liblzma-dev \
+    libncursesw5-dev \
+    libreadline-dev \
+    libsqlite3-dev \
     libssl-dev \
     libwayland-dev \
     libwayland-egl-backend-dev \
@@ -105,6 +113,8 @@ prepare_baseenv() {
     libxrender-dev \
     libzstd-dev \
     pkg-config \
+    python3-tk \
+    tk-dev \
     unzip \
     zlib1g-dev \
     zsync
@@ -150,6 +160,21 @@ prepare_buildenv() {
     unzip -d /usr/local/bin "/usr/src/ninja-${ninja_ver}-linux.zip"
   fi
   echo "Ninja version $(ninja --version)"
+}
+
+prepare_python() {
+  python_url="https://www.python.org/ftp/python/${PYTHON_VER}/Python-${PYTHON_VER}.tar.xz"
+  echo "Python version: ${PYTHON_VER}"
+  mkdir -p "/usr/src/python3-${PYTHON_VER}/"
+  if [ ! -f "/usr/src/python3-${PYTHON_VER}/.unpack_ok" ]; then
+    retry curl -kSL "${python_url}" \| tar Jxf - -C "/usr/src/python3-${PYTHON_VER}/" --strip-components 1
+    touch "/usr/src/python3-${PYTHON_VER}/.unpack_ok"
+  fi
+  cd "/usr/src/python3-${PYTHON_VER}"
+  ./configure --enable-shared --enable-optimizations --enable-loadable-sqlite-extensions
+  make -j$(nproc)
+  make install
+  ldconfig
 }
 
 prepare_ssl() {
@@ -435,6 +460,7 @@ prepare_baseenv
 prepare_buildenv
 # compile openssl 3.x. qBittorrent >= 5.0 required openssl 3.x
 #prepare_ssl
+prepare_python
 #prepare_qt
 #preapare_libboost
 #prepare_libtorrent
