@@ -116,6 +116,7 @@ prepare_baseenv() {
     python3-tk \
     tk-dev \
     unzip \
+    zip \
     zlib1g-dev \
     zsync
 
@@ -171,7 +172,7 @@ prepare_python() {
     touch "/usr/src/python3-${PYTHON_VER}/.unpack_ok"
   fi
   cd "/usr/src/python3-${PYTHON_VER}"
-  ./Configure --prefix=/opt --enable-shared --enable-optimizations --enable-loadable-sqlite-extensions
+  ./configure --prefix=/opt --enable-shared --enable-optimizations --enable-loadable-sqlite-extensions
   make -j$(nproc)
   make install
   zip -r "/build/python${PYTHON_VER}.zip" /opt/*
