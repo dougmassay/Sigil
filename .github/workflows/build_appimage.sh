@@ -133,7 +133,7 @@ prepare_baseenv() {
 }
 
 prepare_buildenv() {
-  # install cmake and ninja-build
+  # Install Cmake
   if ! which cmake &>/dev/null; then
     cmake_latest_ver="$(retry curl -ksSL --compressed https://cmake.org/download/ \| grep "'Latest Release'" \| sed -r "'s/.*Latest Release\s*\((.+)\).*/\1/'" \| head -1)"
     cmake_binary_url="https://github.com/Kitware/CMake/releases/download/v${cmake_latest_ver}/cmake-${cmake_latest_ver}-linux-x86_64.tar.gz"
@@ -151,6 +151,8 @@ prepare_buildenv() {
     tar -zxf "/usr/src/cmake-${cmake_latest_ver}-linux-x86_64.tar.gz" -C /usr/local --strip-components 1
   fi
   cmake --version
+
+  # Install Ninja
   if ! which ninja &>/dev/null; then
     ninja_ver="$(retry curl -ksSL --compressed https://ninja-build.org/ \| grep "'The last Ninja release is'" \| sed -r "'s@.*<b>(.+)</b>.*@\1@'" \| head -1)"
     ninja_binary_url="https://github.com/ninja-build/ninja/releases/download/${ninja_ver}/ninja-linux.zip"
@@ -162,14 +164,16 @@ prepare_buildenv() {
     unzip -d /usr/local/bin "/usr/src/ninja-${ninja_ver}-linux.zip"
   fi
   echo "Ninja version $(ninja --version)"
+
+  # Install patchelf
   if ! which patchelf &>/dev/null; then
     patchelf_binary_url="https://github.com/NixOS/patchelf/releases/download/${PATCHELF_VER}/patchelf-${PATCHELF_VER}-x86_64.tar.gz"
     if [ ! -f "/usr/src/patchelf-${PATCHELF_VER}-x86_64.tar.gz.download_ok" ]; then
       rm -f "/usr/src/patchelf-${PATCHELF_VER}-x86_64.tar.gz"
-      retry curl -kLC- -o "/usr/src/ninja-${PATCHELF_VER}--x86_64.tar.gz" "${ninja_binary_url}"
+      retry curl -kLC- -o "/usr/src/patchelf-${PATCHELF_VER}-x86_64.tar.gz" "${patchelf_binary_url}"
       touch "/usr/src/patchelf-${PATCHELF_VER}-x86_64.tar.gz.download_ok"
     fi
-    tar -zxf "/usr/src/cmake-${cmake_latest_ver}-linux-x86_64.tar.gz" -C /usr/local --strip-components 1
+    tar -zxf "/usr/src/patchelf-${PATCHELF_VER}-x86_64.tar.gz" -C /usr/local --strip-components 1
   fi
   echo "Patchelf version $(patchelf --version)"
 }
