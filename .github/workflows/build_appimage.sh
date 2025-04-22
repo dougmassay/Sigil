@@ -11,6 +11,7 @@
 set -o pipefail
 
 export PYTHON_VER="3.13.2"
+export PATCHELF="0.18.0"
 # match qt version E.g 6.8.2, 6.8.3
 export QT_MAJOR_VER="6.8"
 export QT_VER="6.8.2"
@@ -161,6 +162,16 @@ prepare_buildenv() {
     unzip -d /usr/local/bin "/usr/src/ninja-${ninja_ver}-linux.zip"
   fi
   echo "Ninja version $(ninja --version)"
+  if ! which patchelf &>/dev/null; then
+    patchelf_binary_url="https://github.com/NixOS/patchelf/releases/download/${PATCHELF_VER}/patchelf-${PATCHELF_VER}-x86_64.tar.gz"
+    if [ ! -f "/usr/src/patchelf-${PATCHELF_VER}-x86_64.tar.gz.download_ok" ]; then
+      rm -f "/usr/src/patchelf-${PATCHELF_VER}-x86_64.tar.gz"
+      retry curl -kLC- -o "/usr/src/ninja-${PATCHELF_VER}--x86_64.tar.gz" "${ninja_binary_url}"
+      touch "/usr/src/patchelf-${PATCHELF_VER}-x86_64.tar.gz.download_ok"
+    fi
+    tar -zxf "/usr/src/cmake-${cmake_latest_ver}-linux-x86_64.tar.gz" -C /usr/local --strip-components 1
+  fi
+  echo "Patchelf version $(patchelf --version)"
 }
 
 prepare_python() {
@@ -462,8 +473,8 @@ move_artifacts() {
 prepare_baseenv
 prepare_buildenv
 # compile openssl 3.x. qBittorrent >= 5.0 required openssl 3.x
-prepare_ssl
-prepare_python
+#prepare_ssl
+#prepare_python
 #prepare_qt
 #preapare_libboost
 #prepare_libtorrent
