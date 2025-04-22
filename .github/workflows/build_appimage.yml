@@ -21,5 +21,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: my-artifact
-          path: /build/python3.13.2.zip
+          path: /build/python*.zip
           retention-days: 1
