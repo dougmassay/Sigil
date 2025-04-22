@@ -11,7 +11,7 @@
 set -o pipefail
 
 export PYTHON_VER="3.13.2"
-export PATCHELF="0.18.0"
+export PATCHELF_VER="0.18.0"
 # match qt version E.g 6.8.2, 6.8.3
 export QT_MAJOR_VER="6.8"
 export QT_VER="6.8.2"
@@ -23,8 +23,8 @@ SELF_DIR="$(dirname "$(readlink -f "${0}")")"
 retry() {
   # max retry 5 times
   try=5
-  # sleep 1 min every retry
-  sleep_time=60
+  # sleep 30 sec every retry
+  sleep_time=30
   for i in $(seq ${try}); do
     echo "executing with retry: $@" >&2
     if eval "$@"; then
