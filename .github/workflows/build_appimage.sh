@@ -172,11 +172,11 @@ prepare_python() {
     touch "/usr/src/python3-${PYTHON_VER}/.unpack_ok"
   fi
   cd "/usr/src/python3-${PYTHON_VER}"
-  ./configure --enable-shared --enable-optimizations --enable-loadable-sqlite-extensions
+  ./configure --prefix=/usr --enable-shared --enable-optimizations --with-lto --enable-loadable-sqlite-extensions --disable-test-modules
   make -j$(nproc)
-  make DESTDIR=/tmp/stage install
-  cd /tmp/stage
-  zip -r "${SELF_DIR}/python${PYTHON_VER}.zip" .
+  make DESTDIR=/opt/sigiltools/python install
+  cd /opt/sigiltools/python
+  zip -r "/build/sigilpython${PYTHON_VER}.zip" .
   ldconfig
 }
 
@@ -462,7 +462,7 @@ move_artifacts() {
 prepare_baseenv
 prepare_buildenv
 # compile openssl 3.x. qBittorrent >= 5.0 required openssl 3.x
-#prepare_ssl
+prepare_ssl
 prepare_python
 #prepare_qt
 #preapare_libboost
